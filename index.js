@@ -27,11 +27,7 @@ app.get("/select_all", async (req, res, next) => {
       var currentdate = new Date();
 
       var datetimeNew =
-        currentdate.getFullYear() +
-        "-" +
-        currentdate.getMonth() +
-        "-" +
-        currentdate.getDate() +
+        req.query.svdate +
         "|" +
         currentdate.getHours() +
         "-" +
@@ -41,7 +37,7 @@ app.get("/select_all", async (req, res, next) => {
         "-";
 
       const stream = fs.createWriteStream("./select_all.txt");
-      stream.once("open", function (fd) {
+      stream.once("open", async function (fd) {
         const header = `<?xml version="1.0" encoding="windows-874"?>
 <ClaimRec System="OP" PayPlan="CS" Version="0.93">
 <Header>
@@ -53,40 +49,45 @@ app.get("/select_all", async (req, res, next) => {
 </Header>
 <Dispensing>\n`;
         stream.write(header);
-        response.data.map((row) => {
-          stream.write(
-            row.INVNO +
-              "|" +
-              row.SVDATE +
-              "|" +
-              row.BILLMUAD +
-              "|" +
-              row.LCCODE +
-              "|" +
-              row.STDCODE +
-              "|" +
-              row.D_ESC +
-              "|" +
-              row.QTY +
-              "|" +
-              row.UP +
-              "|" +
-              row.CHARGEAMT +
-              "|" +
-              row.CLAIMUP +
-              "|" +
-              row.CLAIMAMOUNT +
-              "|" +
-              row.SVREFID +
-              "|" +
-              row.CLAIMCAT +
-              "\n"
-          );
+        await response.data.map(async (row) => {
+          // console.log(row.SVDATE);
+          if (row.SVDATE == req.query.svdate) {
+            await stream.write(
+              row.INVNO +
+                "|" +
+                row.SVDATE +
+                "|" +
+                row.BILLMUAD +
+                "|" +
+                row.LCCODE +
+                "|" +
+                row.STDCODE +
+                "|" +
+                row.D_ESC +
+                "|" +
+                row.QTY +
+                "|" +
+                row.UP +
+                "|" +
+                row.CHARGEAMT +
+                "|" +
+                row.CLAIMUP +
+                "|" +
+                row.CLAIMAMOUNT +
+                "|" +
+                row.SVREFID +
+                "|" +
+                row.CLAIMCAT +
+                "\n"
+            );
+          }
         });
 
-        stream.write("</DispensedItems>\n</ClaimRec>");
+        await stream.write("</DispensedItems>\n</ClaimRec>");
 
-        stream.end();
+        await stream.end();
+        // const file = `./select_all.txt`;
+        // res.download(file); // Set disposition and send it.
       });
       res.send({ data: response.data, length: response.data.length });
     })
