@@ -41,7 +41,7 @@
         <vs-card>
           <div slot="header">
             <div class="flex justify-between">
-              <span class="text-4xl">ผลลัพธ์ประมวลผลไฟล์ OPSERVICES ใหม่</span>
+              <span class="text-xl">ผลลัพธ์ประมวลผลไฟล์ OPSERVICES ใหม่</span>
               <div class="">
                 <vs-button
                   @click="onClickProcessLine"
