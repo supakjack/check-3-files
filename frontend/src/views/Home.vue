@@ -86,7 +86,6 @@ export default {
     this.textarea_billtran_json = {};
     this.find_billtran_b = [];
     this.arr_OPServices = [];
-    this.activeConfirm = false;
   },
   data() {
     return {
@@ -101,23 +100,17 @@ export default {
     };
   },
   methods: {
-    acceptAlert() {
-      this.$vs.notify({
-        color: "success",
-        title: "สำเร็จ",
-        text: "คัดลอกสำเร็จ",
-      });
-    },
-    async copyText() {
-      try {
-        const result = await this.$copyText(this.textarea_result);
-        if (result) {
-          console.log(result);
-          this.acceptAlert();
+    copyText() {
+      this.$copyText(this.textarea_result).then(
+        function(e) {
+          alert("Copied");
+          console.log(e);
+        },
+        function(e) {
+          alert("Can not copy");
+          console.log(e);
         }
-      } catch (error) {
-        console.log("error");
-      }
+      );
     },
     async onClickProcessLine() {
       this.textarea_billtran_json = JSON.parse(
