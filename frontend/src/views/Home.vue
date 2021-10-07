@@ -134,15 +134,19 @@ export default {
         /\r?\n/
       );
 
+      console.log(this.find_billtran_b);
+      // this.find_billtran_b = this.find_billtran_b.map((fb) => {
+      //   return (fb = fb + "|uncheck");
+      // });
+      // console.log(this.find_billtran_b);
+
       // create new OPServices._text with condition
       const new_arr_OPServices = [];
       this.arr_OPServices.map((OPService) => {
-        let last = "";
         new_arr_OPServices.push(OPService);
         this.find_billtran_b.map((b) => {
           const columns = b.split("|");
-          if (OPService.includes(columns[0]) && last != columns[0]) {
-            last = columns[0];
+          if (OPService.includes(columns[0])) {
             new_arr_OPServices.push(b);
           }
         });
@@ -163,7 +167,6 @@ export default {
         compact: true,
         spaces: 4,
       });
-      console.log(result);
       this.textarea_result = result;
     },
   },
