@@ -3,6 +3,9 @@
     <div slot="header">
       <div class="flex justify-between">
         <span class="text-xl">{{ title }}</span>
+        <vs-button @click="textarea = ''" color="danger" type="filled"
+          >คลิกเพื่อล้างข้อความ</vs-button
+        >
       </div>
     </div>
     <div>
