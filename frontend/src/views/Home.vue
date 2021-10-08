@@ -141,8 +141,9 @@ export default {
         this.find_billtran_b.map((b) => {
           let columns = b.split("|");
           if (OPService.includes(columns[0])) {
+            console.log(columns);
             const word = columns[3];
-            const cost = columns[11];
+            const cost = columns[10];
             const OPService_columns = OPService.split("|");
             columns = OPService_columns;
             columns[2] = "OP";
@@ -151,7 +152,7 @@ export default {
             columns[3] = OPService_columns[3];
             columns[15] = word;
             columns[16] = "IN";
-            columns[17] = cost;
+            columns[18] = cost;
             new_arr_OPServices.push(columns.join("|"));
           }
         });
