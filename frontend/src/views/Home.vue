@@ -142,6 +142,7 @@ export default {
           let columns = b.split("|");
           if (OPService.includes(columns[0])) {
             const word = columns[3];
+            const cost = columns[11];
             const OPService_columns = OPService.split("|");
             columns = OPService_columns;
             columns[2] = "OP";
@@ -150,6 +151,7 @@ export default {
             columns[3] = OPService_columns[3];
             columns[15] = word;
             columns[16] = "IN";
+            columns[17] = cost;
             new_arr_OPServices.push(columns.join("|"));
           }
         });
@@ -168,7 +170,7 @@ export default {
       // convert to string to results textarea
       const result = convert.json2xml(this.textarea_result, {
         compact: true,
-        spaces: 4,
+        spaces: 1,
       });
       this.textarea_result = result;
     },
