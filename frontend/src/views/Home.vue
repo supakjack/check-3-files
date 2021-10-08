@@ -135,10 +135,6 @@ export default {
       );
 
       console.log(this.find_billtran_b);
-      // this.find_billtran_b = this.find_billtran_b.map((fb) => {
-      //   return (fb = fb + "|uncheck");
-      // });
-      // console.log(this.find_billtran_b);
 
       // create new OPServices._text with condition
       const new_arr_OPServices = [];
