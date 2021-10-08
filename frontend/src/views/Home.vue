@@ -134,16 +134,21 @@ export default {
         /\r?\n/
       );
 
-      console.log(this.find_billtran_b);
-
       // create new OPServices._text with condition
       const new_arr_OPServices = [];
       this.arr_OPServices.map((OPService) => {
         new_arr_OPServices.push(OPService);
         this.find_billtran_b.map((b) => {
-          const columns = b.split("|");
+          let columns = b.split("|");
           if (OPService.includes(columns[0])) {
-            new_arr_OPServices.push(b);
+            const OPService_columns = OPService.split("|");
+            console.log(OPService_columns[1]);
+            columns = OPService_columns;
+            columns[2] = "OP";
+            columns[1] = OPService_columns[1];
+            columns[3] = OPService_columns[3];
+            columns[15] = "KENA";
+            new_arr_OPServices.push(columns.join("|"));
           }
         });
       });
