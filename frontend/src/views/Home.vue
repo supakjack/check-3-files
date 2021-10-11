@@ -188,6 +188,7 @@ export default {
       lines = this.textarea_result.split(/\r?\n/)
       lines = await lines.filter((line) => line != '')
       this.textarea_result = lines.join('\n')
+      alert('ตรวจสอบสำเร็จ')
     }
   }
 }
