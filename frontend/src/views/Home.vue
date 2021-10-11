@@ -12,7 +12,7 @@
           title="วางข้อความไฟล์ BILLDISP"
           height="300px"
           label="วางข้อความไฟล์ BILLDISP ลงที่นี้"
-          @eventTextarea="(value) => (textarea_billtran = value)"
+          @eventTextarea="(value) => (textarea_billdisp = value)"
         />
       </vs-col>
       <vs-col
@@ -55,10 +55,10 @@
         <vs-card>
           <div slot="header">
             <div class="flex justify-between">
-              <span class="text-xl">ผลลัพธ์ประมวลผลไฟล์ OPSERVICES ใหม่</span>
+              <span class="text-xl">ผลลัพธ์ประมวลผลไฟล์ BILLDISP ใหม่</span>
               <div class="">
                 <vs-button
-                  @click="onClickProcessLine"
+                  @click="onClickProcessLine2"
                   color="danger"
                   type="filled"
                   >ตรวจสอบ</vs-button
@@ -75,7 +75,7 @@
                 height="300px"
                 :readonly="true"
                 label="ดูผลลัพธ์ประมวลผลไฟล์ OPSERVICES ใหม่ที่นี้ "
-                v-model="textarea_result"
+                v-model="textarea_billdisp_result"
               />
             </div>
           </div>
@@ -139,13 +139,17 @@ export default {
   },
   data() {
     return {
+      textarea_billdisp_result: '',
       textarea_result: '',
       textarea_opservice: '',
       textarea_billtran: '',
+      textarea_billdisp: '',
       find_billtran_b: [],
       arr_OPServices: [],
+      arr_billtran: [],
       textarea_opservice_json: {},
       textarea_billtran_json: {},
+      textarea_billdisp_json: {},
       activeConfirm: false
     }
   },
@@ -239,6 +243,32 @@ export default {
       lines = await lines.filter((line) => line != '')
       this.textarea_result = lines.join('\n')
       alert('ตรวจสอบสำเร็จ')
+    },
+    async onClickProcessLine2() {
+      // console.log(this.textarea_billdisp)
+      this.textarea_billdisp_json = await JSON.parse(
+        convert.xml2json(this.textarea_billdisp, { compact: true, spaces: 4 })
+      )
+
+      // console.log(this.textarea_billdisp_json.ClaimRec.Dispensing._text)
+      const words = this.textarea_billdisp_json.ClaimRec.Dispensing._text.split(
+        '\n'
+      )
+      // console.log(words)
+      words.map((word) => {
+        if (word != '') {
+          // console.log(word)
+          const find_word = word.split('|')
+          // console.log(find_word[7].replaceAll('.', ''))
+          find_word[7] = find_word[7].replaceAll('.', '')
+          // console.log(find_word[7].replaceAll('.', ''));
+          word = find_word.join('|')
+          // finish find
+          // console.log(word);
+        }
+      })
+      this.textarea_billdisp_json.ClaimRec.Dispensing._text = words.join('\n')
+      // console.log(words.join('\n'))
     }
   }
 }
