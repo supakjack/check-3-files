@@ -5,7 +5,21 @@
         type="flex"
         vs-justify="center"
         vs-align="center"
-        vs-w="6"
+        vs-w="4"
+        class="p-3"
+      >
+        <CardTextarea
+          title="วางข้อความไฟล์ BILLDISP"
+          height="300px"
+          label="วางข้อความไฟล์ BILLDISP ลงที่นี้"
+          @eventTextarea="(value) => (textarea_billtran = value)"
+        />
+      </vs-col>
+      <vs-col
+        type="flex"
+        vs-justify="center"
+        vs-align="center"
+        vs-w="4"
         class="p-3"
       >
         <CardTextarea
@@ -19,7 +33,7 @@
         type="flex"
         vs-justify="center"
         vs-align="center"
-        vs-w="6"
+        vs-w="4"
         class="p-3"
       >
         <CardTextarea
@@ -35,7 +49,7 @@
         type="flex"
         vs-justify="center"
         vs-align="center"
-        vs-w="12"
+        vs-w="6"
         class="p-3"
       >
         <vs-card>
@@ -47,10 +61,46 @@
                   @click="onClickProcessLine"
                   color="danger"
                   type="filled"
-                  >คลิกเพื่อตรวจสอบ</vs-button
+                  >ตรวจสอบ</vs-button
                 >
                 <vs-button @click="copyText" color="success" type="filled"
-                  >คลิกเพื่อคัดลอก</vs-button
+                  >คัดลอก</vs-button
+                >
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <vs-textarea
+                height="300px"
+                :readonly="true"
+                label="ดูผลลัพธ์ประมวลผลไฟล์ OPSERVICES ใหม่ที่นี้ "
+                v-model="textarea_result"
+              />
+            </div>
+          </div>
+        </vs-card>
+      </vs-col>
+      <vs-col
+        type="flex"
+        vs-justify="center"
+        vs-align="center"
+        vs-w="6"
+        class="p-3"
+      >
+        <vs-card>
+          <div slot="header">
+            <div class="flex justify-between">
+              <span class="text-xl">ผลลัพธ์ประมวลผลไฟล์ OPSERVICES ใหม่</span>
+              <div class="">
+                <vs-button
+                  @click="onClickProcessLine"
+                  color="danger"
+                  type="filled"
+                  >ตรวจสอบ</vs-button
+                >
+                <vs-button @click="copyText" color="success" type="filled"
+                  >คัดลอก</vs-button
                 >
               </div>
             </div>
