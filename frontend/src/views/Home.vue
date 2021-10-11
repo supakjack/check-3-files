@@ -72,111 +72,125 @@
 </template>
 
 <script>
-import convert from "xml-js";
-import CardTextarea from "./../components/CardTextarea.vue";
+import convert from 'xml-js'
+import CardTextarea from './../components/CardTextarea.vue'
 export default {
-  name: "LinedTextarea",
+  name: 'LinedTextarea',
   components: {
-    CardTextarea,
+    CardTextarea
   },
   mounted() {
-    this.textarea_opservice = "";
-    this.textarea_opservice_json = {};
-    this.textarea_billtran = "";
-    this.textarea_billtran_json = {};
-    this.find_billtran_b = [];
-    this.arr_OPServices = [];
+    this.textarea_opservice = ''
+    this.textarea_opservice_json = {}
+    this.textarea_billtran = ''
+    this.textarea_billtran_json = {}
+    this.find_billtran_b = []
+    this.arr_OPServices = []
   },
   data() {
     return {
-      textarea_result: "",
-      textarea_opservice: "",
-      textarea_billtran: "",
+      textarea_result: '',
+      textarea_opservice: '',
+      textarea_billtran: '',
       find_billtran_b: [],
       arr_OPServices: [],
       textarea_opservice_json: {},
       textarea_billtran_json: {},
-      activeConfirm: false,
-    };
+      activeConfirm: false
+    }
   },
   methods: {
     copyText() {
       this.$copyText(this.textarea_result).then(
         function(e) {
-          alert("Copied");
-          console.log(e);
+          alert('Copied')
+          console.log(e)
         },
         function(e) {
-          alert("Can not copy");
-          console.log(e);
+          alert('Can not copy')
+          console.log(e)
         }
-      );
+      )
     },
     async onClickProcessLine() {
       this.textarea_billtran_json = JSON.parse(
         convert.xml2json(this.textarea_billtran, { compact: true, spaces: 4 })
-      );
+      )
       const arr_BillItems = this.textarea_billtran_json.ClaimRec.BillItems._text.split(
         /\r?\n/
-      );
+      )
 
       this.find_billtran_b = await arr_BillItems.filter((row) => {
-        const columns = row.split("|");
-        if (columns[2] == "B") {
-          return row;
+        const columns = row.split('|')
+        if (columns[2] == 'B') {
+          return row
         }
-      });
+      })
 
       this.textarea_opservice_json = JSON.parse(
         convert.xml2json(this.textarea_opservice, { compact: true, spaces: 4 })
-      );
+      )
       this.arr_OPServices = this.textarea_opservice_json.ClaimRec.OPServices._text.split(
         /\r?\n/
-      );
+      )
 
       // create new OPServices._text with condition
-      const new_arr_OPServices = [];
+      const new_arr_OPServices = []
       this.arr_OPServices.map((OPService) => {
-        new_arr_OPServices.push(OPService);
+        new_arr_OPServices.push(OPService)
         this.find_billtran_b.map((b) => {
-          let columns = b.split("|");
+          let columns = b.split('|')
           if (OPService.includes(columns[0])) {
-            console.log(columns);
-            const word = columns[3];
-            const cost = columns[10];
-            const OPService_columns = OPService.split("|");
-            columns = OPService_columns;
-            columns[2] = "OP";
-            columns[1] = OPService_columns[1];
-            console.log(word);
-            columns[3] = OPService_columns[3];
-            columns[15] = word;
-            columns[16] = "IN";
-            columns[18] = cost;
-            new_arr_OPServices.push(columns.join("|"));
+            const word = columns[3]
+            const cost = columns[10]
+            const OPService_columns = OPService.split('|')
+            columns = OPService_columns
+            columns[2] = 'OP'
+            columns[1] = OPService_columns[1]
+            columns[3] = OPService_columns[3]
+            columns[15] = word
+            columns[16] = 'IN'
+            columns[18] = cost
+            new_arr_OPServices.push(columns.join('|'))
           }
-        });
-      });
+        })
+      })
 
       // assignt to results textarea variable
-      this.textarea_result = this.textarea_opservice_json;
-      this.arr_OPServices = new_arr_OPServices;
+      this.textarea_result = this.textarea_opservice_json
+      this.arr_OPServices = new_arr_OPServices
 
-      this.textarea_result.ClaimRec.OPServices._text = "";
+      let findTrueLength = this.arr_OPServices.filter((result) => result != '')
+      findTrueLength = findTrueLength.length
+      console.log('this.arr_OPServices.length : ' + findTrueLength)
+      this.textarea_result.ClaimRec.Header.RECCOUNT._text = findTrueLength
+
+      this.textarea_result.ClaimRec.OPServices._text = ''
       this.arr_OPServices.map((op) => {
         this.textarea_result.ClaimRec.OPServices._text =
-          this.textarea_result.ClaimRec.OPServices._text + op + "\n";
-      });
+          this.textarea_result.ClaimRec.OPServices._text + op + '\n'
+      })
 
       // convert to string to results textarea
       const result = convert.json2xml(this.textarea_result, {
         compact: true,
-        spaces: 1,
-      });
-      this.textarea_result = result;
-    },
-  },
-};
+        spaces: 1
+      })
+
+      let lines = result.split(/\r?\n/)
+      const textFormat = await lines.map((line) => {
+        return (line = line.trim())
+      })
+
+      this.textarea_result = textFormat.join('\n')
+
+      // this.textarea_result
+      lines = this.textarea_result.split(/\r?\n/)
+      lines = await lines.filter((line) => line != '')
+      this.textarea_result = lines.join('\n')
+    }
+  }
+}
 </script>
 
 <style scoped></style>
