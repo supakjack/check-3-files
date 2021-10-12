@@ -63,7 +63,7 @@
                   type="filled"
                   >ตรวจสอบ</vs-button
                 >
-                <vs-button @click="copyText" color="success" type="filled"
+                <vs-button @click="copyTextBILLDISP" color="success" type="filled"
                   >คัดลอก</vs-button
                 >
               </div>
@@ -99,7 +99,7 @@
                   type="filled"
                   >ตรวจสอบ</vs-button
                 >
-                <vs-button @click="copyText" color="success" type="filled"
+                <vs-button @click="copyTextOPSERVICES" color="success" type="filled"
                   >คัดลอก</vs-button
                 >
               </div>
@@ -154,7 +154,19 @@ export default {
     }
   },
   methods: {
-    copyText() {
+    copyTextBILLDISP() {
+      this.$copyText(this.textarea_billdisp_result).then(
+        function(e) {
+          alert('Copied')
+          console.log(e)
+        },
+        function(e) {
+          alert('Can not copy')
+          console.log(e)
+        }
+      )
+    },
+    copyTextOPSERVICES() {
       this.$copyText(this.textarea_result).then(
         function(e) {
           alert('Copied')
@@ -242,8 +254,6 @@ export default {
           arr_new_word.push(word)
         }
       })
-
-      // console.log(arr_new_word.join('\n'))
 
       this.textarea_result.ClaimRec.OPServices._text = arr_new_word.join('\n')
 
