@@ -58,7 +58,7 @@
               <span class="text-xl">ผลลัพธ์ประมวลผลไฟล์ BILLDISP ใหม่</span>
               <div class="">
                 <vs-button
-                  @click="onClickProcessLine2"
+                  @click="onClickProcessBILLDISP"
                   color="danger"
                   type="filled"
                   >ตรวจสอบ</vs-button
@@ -94,7 +94,7 @@
               <span class="text-xl">ผลลัพธ์ประมวลผลไฟล์ OPSERVICES ใหม่</span>
               <div class="">
                 <vs-button
-                  @click="onClickProcessLine"
+                  @click="onClickProcessOPSERVICES"
                   color="danger"
                   type="filled"
                   >ตรวจสอบ</vs-button
@@ -166,7 +166,7 @@ export default {
         }
       )
     },
-    async onClickProcessLine() {
+    async onClickProcessOPSERVICES() {
       this.textarea_billtran_json = JSON.parse(
         convert.xml2json(this.textarea_billtran, { compact: true, spaces: 4 })
       )
@@ -225,6 +225,28 @@ export default {
           this.textarea_result.ClaimRec.OPServices._text + op + '\n'
       })
 
+      // console.log(this.textarea_result.ClaimRec.OPServices._text)
+
+      const new_text = this.textarea_result.ClaimRec.OPServices._text.split(
+        '\n'
+      )
+
+      // console.log(new_text)
+
+      let arr_new_word = []
+      await new_text.map((word) => {
+        if (word != '') {
+          const find_word = word.split('|')
+          find_word[11] = find_word[11].replaceAll('.', '')
+          word = find_word.join('|')
+          arr_new_word.push(word)
+        }
+      })
+
+      // console.log(arr_new_word.join('\n'))
+
+      this.textarea_result.ClaimRec.OPServices._text = arr_new_word.join('\n')
+
       // convert to string to results textarea
       const result = convert.json2xml(this.textarea_result, {
         compact: true,
@@ -238,37 +260,49 @@ export default {
 
       this.textarea_result = textFormat.join('\n')
 
-      // this.textarea_result
       lines = this.textarea_result.split(/\r?\n/)
       lines = await lines.filter((line) => line != '')
       this.textarea_result = lines.join('\n')
       alert('ตรวจสอบสำเร็จ')
     },
-    async onClickProcessLine2() {
-      // console.log(this.textarea_billdisp)
+    async onClickProcessBILLDISP() {
       this.textarea_billdisp_json = await JSON.parse(
         convert.xml2json(this.textarea_billdisp, { compact: true, spaces: 4 })
       )
 
-      // console.log(this.textarea_billdisp_json.ClaimRec.Dispensing._text)
       const words = this.textarea_billdisp_json.ClaimRec.Dispensing._text.split(
         '\n'
       )
-      // console.log(words)
+      let arr_new_word = []
       words.map((word) => {
         if (word != '') {
-          // console.log(word)
           const find_word = word.split('|')
-          // console.log(find_word[7].replaceAll('.', ''))
           find_word[7] = find_word[7].replaceAll('.', '')
-          // console.log(find_word[7].replaceAll('.', ''));
           word = find_word.join('|')
-          // finish find
-          // console.log(word);
+          arr_new_word.push(word)
         }
       })
-      this.textarea_billdisp_json.ClaimRec.Dispensing._text = words.join('\n')
-      // console.log(words.join('\n'))
+      this.textarea_billdisp_json.ClaimRec.Dispensing._text = arr_new_word.join(
+        '\n'
+      )
+
+      const result = convert.json2xml(this.textarea_billdisp_json, {
+        compact: true,
+        spaces: 1
+      })
+      console.log(result)
+
+      let lines = result.split(/\r?\n/)
+      const textFormat = await lines.map((line) => {
+        return (line = line.trim())
+      })
+
+      this.textarea_billdisp_result = textFormat.join('\n')
+
+      lines = this.textarea_billdisp_result.split(/\r?\n/)
+      lines = await lines.filter((line) => line != '')
+      this.textarea_billdisp_result = lines.join('\n')
+      alert('ตรวจสอบสำเร็จ')
     }
   }
 }
