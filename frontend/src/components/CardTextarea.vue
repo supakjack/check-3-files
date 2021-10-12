@@ -4,7 +4,7 @@
       <div class="flex justify-between">
         <span class="text-xl">{{ title }}</span>
         <vs-button @click="textarea = ''" color="danger" type="filled"
-          >คลิกเพื่อล้างข้อความ</vs-button
+          >ลบ</vs-button
         >
       </div>
     </div>
