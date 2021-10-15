@@ -63,7 +63,10 @@
                   type="filled"
                   >ตรวจสอบ</vs-button
                 >
-                <vs-button @click="copyTextBILLDISP" color="success" type="filled"
+                <vs-button
+                  @click="copyTextBILLDISP"
+                  color="success"
+                  type="filled"
                   >คัดลอก</vs-button
                 >
               </div>
@@ -99,7 +102,10 @@
                   type="filled"
                   >ตรวจสอบ</vs-button
                 >
-                <vs-button @click="copyTextOPSERVICES" color="success" type="filled"
+                <vs-button
+                  @click="copyTextOPSERVICES"
+                  color="success"
+                  type="filled"
                   >คัดลอก</vs-button
                 >
               </div>
@@ -122,6 +128,7 @@
 </template>
 
 <script>
+// import isNumber from 'is-number'
 import convert from 'xml-js'
 import CardTextarea from './../components/CardTextarea.vue'
 export default {
@@ -270,6 +277,9 @@ export default {
 
       this.textarea_result = textFormat.join('\n')
 
+      this.textarea_result = this.textarea_result.replaceAll('พทป', '-')
+      this.textarea_result = this.textarea_result.replaceAll('พทว', '-')
+
       lines = this.textarea_result.split(/\r?\n/)
       lines = await lines.filter((line) => line != '')
       this.textarea_result = lines.join('\n')
@@ -284,10 +294,38 @@ export default {
         '\n'
       )
       let arr_new_word = []
-      words.map((word) => {
+      words.map(async (word) => {
         if (word != '') {
           const find_word = word.split('|')
           find_word[7] = find_word[7].replaceAll('.', '')
+          // let s7_number = find_word[7].replace(/\D/g,'');
+          // find_word[7] =
+
+          //  !find_word[7].includes(str2)
+          // const find_character = find_word[7].split('')
+          // console.log(find_character)
+          // let num_check_ch = 0
+          // await find_character.map((ch, index) => {
+          //   if (index == 0) {
+          //     num_check_ch = 0
+          //   }
+          //   if (!isNumber(ch)) {
+          //     num_check_ch = num_check_ch + 1
+          //   }
+          //   if (num_check_ch > 1) {
+          //     console.log(find_character[index])
+          //     console.log('not format')
+          //   }
+          // })
+          // for (const data of find_character) {
+          //   if (!isNumber(data)) {
+
+          //   }
+          //   console.log(data)
+          //   console.log(isNumber(data))
+          // }
+          // console.log(find_character)
+          // console.log(isNumber(find_character[1]))
           word = find_word.join('|')
           arr_new_word.push(word)
         }
@@ -300,7 +338,7 @@ export default {
         compact: true,
         spaces: 1
       })
-      console.log(result)
+      // console.log(result)
 
       let lines = result.split(/\r?\n/)
       const textFormat = await lines.map((line) => {
@@ -312,6 +350,14 @@ export default {
       lines = this.textarea_billdisp_result.split(/\r?\n/)
       lines = await lines.filter((line) => line != '')
       this.textarea_billdisp_result = lines.join('\n')
+      this.textarea_billdisp_result = this.textarea_billdisp_result.replaceAll(
+        'พทป',
+        '-'
+      )
+      this.textarea_billdisp_result = this.textarea_billdisp_result.replaceAll(
+        'พทว',
+        '-'
+      )
       alert('ตรวจสอบสำเร็จ')
     }
   }
