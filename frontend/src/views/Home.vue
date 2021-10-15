@@ -129,6 +129,16 @@
 
 <script>
 // import isNumber from 'is-number'
+import replaceString from 'replace-string'
+
+console.log(
+  replaceString(
+    'Foo 🐑 Bar',
+    '🐑',
+    (matchedSubstring) => `${matchedSubstring}❤️`
+  )
+)
+
 import convert from 'xml-js'
 import CardTextarea from './../components/CardTextarea.vue'
 export default {
